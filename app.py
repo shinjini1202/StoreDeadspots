@@ -2,7 +2,6 @@ import streamlit as st
 import cv2
 import os
 import numpy as np
-import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 from collections import defaultdict
@@ -66,16 +65,38 @@ def plot_heatmap(footfall):
     plt.ylabel('Grid Y')
     return plt.gcf()
 
+def generate_report(footfall):
+    deadspots = []
+    threshold = np.percentile(footfall, 25)  # Define a threshold for low footfall areas
+
+    for i in range(footfall.shape[0]):
+        for j in range(footfall.shape[1]):
+            if footfall[i, j] <= threshold:
+                deadspots.append((i, j))
+
+    report = f"Total Grids: {footfall.size}\n"
+    report += f"Deadspots Identified: {len(deadspots)}\n\n"
+    report += "Deadspots Locations (Grid Y, Grid X):\n"
+    for (y, x) in deadspots:
+        report += f"- Grid Y: {y + 1}, Grid X: {x + 1}\n"
+
+    return report
+
 def run_app():
     st.title("Store Deadspot Detection")
 
-    # Display the video
-    st.subheader("Video Feed")
-    frame_placeholder = st.empty()
+    # Layout with two columns
+    col1, col2 = st.columns(2)
 
-    # Display the heatmap
-    st.subheader("Customer Footfall Heatmap")
-    heatmap_placeholder = st.empty()
+    with col1:
+        st.subheader("Video Feed")
+        frame_placeholder = st.empty()
+        st.subheader("Customer Footfall Heatmap")
+        heatmap_placeholder = st.empty()
+
+    with col2:
+        st.subheader("Deadspots Report")
+        report_placeholder = st.empty()
 
     # Start the video processing
     while cap.isOpened():
@@ -93,6 +114,10 @@ def run_app():
         # Calculate and display the heatmap
         footfall = calculate_footfall(frame, people)
         heatmap_placeholder.pyplot(plot_heatmap(footfall))
+
+        # Generate and display the report
+        report = generate_report(footfall)
+        report_placeholder.text(report)
 
     # Release the video capture
     cap.release()
