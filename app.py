@@ -127,7 +127,7 @@ def plot_best_selling_products_with_brands(data):
 def run_app():
     st.set_page_config(layout="wide", page_title="Store Analysis Dashboard")
     
-    # Apply some custom CSS to improve the layout
+    # Apply custom CSS for layout and styling
     st.markdown("""
     <style>
     .reportview-container .main .block-container {
@@ -142,10 +142,17 @@ def run_app():
         height: 400px;
         overflow-y: auto;
     }
+    .title {
+        color: #2ca02c;
+        font-size: 36px;
+        font-weight: bold;
+        text-align: center;
+        margin-top: 20px;
+    }
     </style>
     """, unsafe_allow_html=True)
 
-    st.title("Store Analysis Dashboard")
+    st.markdown('<div class="title">Store Analysis Dashboard</div>', unsafe_allow_html=True)
 
     # Create tabs for different sections
     tab1, tab2, tab3 = st.tabs(["Live Feed & Heatmap", "Category Analysis", "Deadspots Report"])
