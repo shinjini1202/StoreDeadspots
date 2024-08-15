@@ -28,7 +28,7 @@ This project is a Streamlit application that analyzes store video footage to det
 - `store.mp4`: Video file of the store
 - `deploy.prototxt`: Network architecture file for the detection model
 - `mobilenet_iter_73000.caffemodel`: Pre-trained weights for the detection model
-- `mock_sales_dataset.csv`: CSV file containing store product data
+- `store.csv`: CSV file containing store product data
 
 2. Run the Streamlit app:
    streamlit run app.py
